@@ -7,8 +7,8 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 
 /**
  * @author BG315420
- * @date 2018/3/20 10:39
- * @desc 插件util
+ * @version  2018/3/20 10:39
+ *  插件util
  */
 public class PluginUtils {
     public static Object getTarget(Invocation invocation){

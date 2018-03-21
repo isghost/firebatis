@@ -20,8 +20,9 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 
 /**
  * @author BG315420
- * @date 2018/3/19 17:31
- * @desc 语法修复
+ * @version  2018/3/19 17:31
+ *
+ *  语法修复
  */
 @Intercepts(
     {

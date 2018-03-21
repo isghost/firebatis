@@ -34,8 +34,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 
 /**
  * @author BG315420
- * @date 2018/3/19 10:03
- * @desc
+ * @version 2018/3/19 10:03
  * todo 抛出指定的异常， 目前不管抛出什么异常，都会被转换为MyBatisSystemException
  * todo 目前只支持pojo，增加@Param支持
  */

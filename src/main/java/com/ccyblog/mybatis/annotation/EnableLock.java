@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 
 /**
  * @author BG315420
- * @date 2018/3/19 11:22
- * @desc sql自动添加version字段
+ * @version 2018/3/19 11:22
+ * sql自动添加version字段
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
