@@ -31,7 +31,17 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 )
 public class SqlRectifyInterceptor implements Interceptor{
 
-    final static Pattern pattern = Pattern.compile("\\w+\\s+in\\s*\\(\\s*\\)");
+    /**
+     * 当foreach为空的时候，可能会出现
+     *  xxx in () and x = 0 或者 xxx in  and x = 0 的两种情况
+     *  跟mybatis版本有关，不排除其他可能性
+     */
+    static final Pattern PATTERN = Pattern.compile("\\w+\\s+in\\s*\\(\\s*\\)|\\w+\\s+in(?!\\s*\\()");
+
+    /**
+     * mysql可以直接替换成false,oracle不可以
+     */
+    private static String FALSE_FORMULA = " 1 = 2 ";
 
     private static final Log log = LogFactory.getLog(SqlRectifyInterceptor.class);
 
@@ -47,7 +57,7 @@ public class SqlRectifyInterceptor implements Interceptor{
         }
 
         String sql = boundSql.getSql();
-        sql = pattern.matcher(sql).replaceAll("false");
+        sql = PATTERN.matcher(sql).replaceAll(FALSE_FORMULA);
         metaObject.setValue("delegate.boundSql.sql", sql);
         log.debug(sql);
         return invocation.proceed();
