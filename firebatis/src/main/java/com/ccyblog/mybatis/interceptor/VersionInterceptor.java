@@ -3,6 +3,7 @@ package com.ccyblog.mybatis.interceptor;
 import com.ccyblog.mybatis.annotation.EnableLock;
 import com.ccyblog.mybatis.util.PluginUtils;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
@@ -36,7 +37,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
  * @author BG315420
  * @version 2018/3/19 10:03
  * todo 抛出指定的异常， 目前不管抛出什么异常，都会被转换为MyBatisSystemException
- * todo 目前只支持pojo，增加@Param支持
+ * todo 函数查找使用缓存
  */
 @Intercepts(
     {
@@ -50,8 +51,8 @@ public class VersionInterceptor implements Interceptor{
 
     private String versionColumn = "version";
     private String versionField = "version";
-    private Boolean defaultEnableLock;
-    private Boolean defaultThrowException;
+    private Boolean defaultEnableLock = false;
+    private Boolean defaultThrowException = false;
 
     final String UPDATE = "update";
     final String PREPARE = "prepare";
@@ -138,8 +139,30 @@ public class VersionInterceptor implements Interceptor{
         }
         int pos = id.lastIndexOf(".");
         Class<?> daoClass = Class.forName(id.substring(0, pos));
-        Method method = daoClass.getDeclaredMethod(id.substring(pos + 1), clsArray);
+        String methodName = id.substring(pos + 1);
+        Method method = getMethod(daoClass, methodName, clsArray);
         return method.getAnnotation(EnableLock.class);
+    }
+
+    private Method getMethod(Class<?> daoClass,String methodName, Class<?>[] clsArray){
+        Method[] declaredMethods = daoClass.getDeclaredMethods();
+        for (Method method: declaredMethods) {
+            Parameter[] parameters = method.getParameters();
+            if(!method.getName().equals(methodName) || parameters.length != clsArray.length){
+                continue;
+            }
+            boolean flag = true;
+            for (int i = 0; i <parameters.length ; i++) {
+                if(!parameters[i].getType().isAssignableFrom(clsArray[i])){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                return method;
+            }
+        }
+        return null;
     }
 
     /**

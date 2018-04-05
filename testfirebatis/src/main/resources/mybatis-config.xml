@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+
+    <settings>
+        <!-- Globally enables or disables any caches configured in any mapper under this configuration -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- Sets the number of seconds the driver will wait for a response from the database -->
+        <setting name="defaultStatementTimeout" value="3000"/>
+        <!-- Enables automatic mapping from classic database column names A_COLUMN to camel case classic Java property names aColumn -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- Allows JDBC support for generated keys. A compatible driver is required.
+        This setting forces generated keys to be used if set to true,
+         as some drivers deny compatibility but still work -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <setting name="lazyLoadingEnabled" value="false" />
+    </settings>
+
+
+    <typeAliases>
+        <!--<typeAlias alias="account" type="www.ccyblog.novel.modules.accopotity.Account"/>-->
+    </typeAliases>
+
+
+    <plugins>
+        <!-- 乐观锁 -->
+        <plugin interceptor="com.ccyblog.mybatis.interceptor.VersionInterceptor">
+            <!-- 数据库的version的字段名称 -->
+            <property name="versionColumn" value="version" />
+            <!-- POJO对象中version的名称 -->
+            <property name="versionField" value="version" />
+            <!-- 全局自动添加version默认开关 -->
+            <property name="defaultEnableLock" value="false"/>
+            <!-- 当update影响行数为0时，是否抛出异常 -->
+            <property name="enableException" value="false"/>
+        </plugin>
+        <!-- 语法修正 -->
+        <plugin interceptor="com.ccyblog.mybatis.interceptor.SqlRectifyInterceptor" />
+    </plugins>
+
+    <mappers>
+        <!--<mapper resource="classpath*:**/mappers/*.xml"/>-->
+    </mappers>
+
+
+
+</configuration>

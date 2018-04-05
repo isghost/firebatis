@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" name="crawler" monitorInterval="30">
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <!--%d时间 %t线程 %p日志级别 %c类名 %L行数 %m错误信息  %n换行符-->
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %5p %c{1}:%L - %m%n"/>
+    </Console>
+    <RollingFile name="RollingFile" fileName="../logs/server.log"
+      filePattern="../logs/server.log-%d{yyyy-MM-dd}"
+      ignoreExceptions="false">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %5p %c{1}:%L - %m%n"/>
+      <TimeBasedTriggeringPolicy interval="1"/>
+    </RollingFile>
+  </Appenders>
+  <Filters>
+    <!--<RegexFilter regex=".*DEBUG OrderedRequestContextFilter.*" onMatch="DENY" onMismatch="ACCEPT"/>-->
+  </Filters>
+  <Loggers>
+    <Root level="DEBUG">
+      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+  </Loggers>
+</Configuration>

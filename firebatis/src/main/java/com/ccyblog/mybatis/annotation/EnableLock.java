@@ -15,6 +15,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EnableLock {
-    boolean value() default false ;
+    boolean value() default true ;
     boolean enableException() default false;
 }
