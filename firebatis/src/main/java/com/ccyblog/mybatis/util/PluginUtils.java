@@ -12,6 +12,9 @@ import org.apache.ibatis.reflection.SystemMetaObject;
  */
 public class PluginUtils {
 
+    private PluginUtils(){
+    }
+
     public static Object getTarget(Invocation invocation) {
         Object target = invocation.getTarget();
         while (Proxy.isProxyClass(target.getClass())) {
