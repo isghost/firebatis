@@ -19,29 +19,29 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 
 /**
- * @author BG315420
- * @version  2018/3/19 17:31
+ * @author isghost
+ * @version 2018/3/19 17:31
  *
- *  语法修复
+ * 语法修复
  */
 @Intercepts(
     {
-        @Signature(type= StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}),
+        @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}),
     }
 )
-public class SqlRectifyInterceptor implements Interceptor{
+public class SqlRectifyInterceptor implements Interceptor {
 
     /**
      * 当foreach为空的时候，可能会出现
-     *  xxx in () and x = 0 或者 xxx in  and x = 0 的两种情况
-     *  跟mybatis版本有关，不排除其他可能性
+     * xxx in () and x = 0 或者 xxx in  and x = 0 的两种情况
+     * 跟mybatis版本有关，不排除其他可能性
      */
     static final Pattern PATTERN = Pattern.compile("\\w+\\s+in\\s*\\(\\s*\\)|\\w+\\s+in(?!\\s*\\()");
 
     /**
-     * mysql可以直接替换成false,oracle不可以
+     * mysql可以直接替换成false,oracle不可以, 使用1 = 2表示false
      */
-    private static String FALSE_FORMULA = " 1 = 2 ";
+    private static final String FALSE_FORMULA = " 1 = 2 ";
 
     private static final Log log = LogFactory.getLog(SqlRectifyInterceptor.class);
 
@@ -52,7 +52,7 @@ public class SqlRectifyInterceptor implements Interceptor{
         MappedStatement ms = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
         BoundSql boundSql = statementHandler.getBoundSql();
 
-        if(ms.getSqlCommandType() == SqlCommandType.INSERT){
+        if (ms.getSqlCommandType() == SqlCommandType.INSERT) {
             return invocation.proceed();
         }
 
@@ -70,6 +70,6 @@ public class SqlRectifyInterceptor implements Interceptor{
 
     @Override
     public void setProperties(Properties properties) {
-
+        // no config
     }
 }

@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author BG315420
+ * @author isghost
  * @version 2018/3/19 11:22
  * sql自动添加version字段
  */
@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EnableLock {
-    boolean value() default true ;
+
+    boolean value() default true;
+
     boolean enableException() default false;
 }
